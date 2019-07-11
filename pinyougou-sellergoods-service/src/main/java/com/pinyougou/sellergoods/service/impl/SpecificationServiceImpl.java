@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -70,6 +71,7 @@ public class SpecificationServiceImpl implements SpecificationService {
 		criteria.andIdEqualTo(specification.getSpecification().getId());
 		specificationOptionMapper.deleteByExample(example);
 		for(TbSpecificationOption specificationOption:specification.getSpecificationOptionList()) {
+			specificationOption.setSpecId(specification.getSpecification().getId());
 			specificationOptionMapper.insert(specificationOption);
 		}
 	}	
@@ -115,7 +117,7 @@ public class SpecificationServiceImpl implements SpecificationService {
 	}
 	
 	
-		@Override
+	@Override
 	public PageResult findPage(TbSpecification specification, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
@@ -133,17 +135,21 @@ public class SpecificationServiceImpl implements SpecificationService {
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
-		@Override
-		public void add(Specification specification) {
-			specificationMapper.insert(specification.getSpecification());
-			for(TbSpecificationOption specificationOption : specification.getSpecificationOptionList()) {
-				specificationOption.setSpecId(specification.getSpecification().getId());
-				specificationOptionMapper.insert(specificationOption);
-				
-			}
-			
+	@Override
+	public void add(Specification specification) {
+		specificationMapper.insert(specification.getSpecification());
+		for(TbSpecificationOption specificationOption : specification.getSpecificationOptionList()) {
+			specificationOption.setSpecId(specification.getSpecification().getId());
+			specificationOptionMapper.insert(specificationOption);
+
 		}
 
-		
-	
+	}
+
+	@Override
+	public List<Map> selectSpecificationOptionList() {
+		return specificationMapper.selectSpecificationOptionList();
+	}
+
+
 }

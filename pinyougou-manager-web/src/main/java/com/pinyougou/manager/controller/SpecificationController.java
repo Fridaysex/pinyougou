@@ -1,5 +1,6 @@
 package com.pinyougou.manager.controller;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -113,5 +114,14 @@ public class SpecificationController {
 	public PageResult search(@RequestBody TbSpecification specification, int page, int rows  ){
 		return specificationService.findPage(specification, page, rows);		
 	}
-	
+
+	/**
+	 * 查询关联规格下拉数据
+	 * @return
+	 */
+	@RequestMapping("/selectSpecificationOptionList")
+	public List<Map> selectSpecificationOptionList(){
+		List<Map> selectSpecificationOptionList = specificationService.selectSpecificationOptionList();
+		return selectSpecificationOptionList;
+	}
 }

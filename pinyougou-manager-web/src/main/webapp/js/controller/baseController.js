@@ -12,7 +12,7 @@ app.controller("baseController",function($scope){
 		itemsPerPage:10,
 		perPageOption:[10,20,30,40,50],
 		onChange:function(){
-			alert("reload");
+			//alert("reload");
 			$scope.reloadList();
 		}
 	}
@@ -26,4 +26,16 @@ app.controller("baseController",function($scope){
 			$scope.selectIds.splice(idx,1);
 		}
 	}
+
+	$scope.jsonToString=function (jsonString,key) {
+		var json=JSON.parse(jsonString);//将json字符串转换成json对象
+		var value="";
+		for (i=0;i<json.length;i++){
+			if (i>0){
+				value+=",";
+			}
+			value+=json[i][key];
+		}
+		return value;
+    }
 });

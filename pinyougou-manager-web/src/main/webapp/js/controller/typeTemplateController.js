@@ -1,5 +1,5 @@
  //控制层 
-app.controller('typeTemplateController' ,function($scope,$controller ,typeTemplateService,brandService){
+app.controller('typeTemplateController' ,function($scope,$controller ,typeTemplateService,brandService,specificationService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -26,7 +26,10 @@ app.controller('typeTemplateController' ,function($scope,$controller ,typeTempla
 	$scope.findOne=function(id){				
 		typeTemplateService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+				$scope.entity= response;
+				$scope.entity.brandList=JSON.parse($scope.entity.brandList);
+				$scope.entity.specList=JSON.parse($scope.entity.specList);
+                $scope.entity.customAttributeItems=JSON.parse($scope.entity.customAttributeItems);
 			}
 		);				
 	}
@@ -81,11 +84,22 @@ app.controller('typeTemplateController' ,function($scope,$controller ,typeTempla
 	$scope.brandList={data:[{id:1,text:'联想'},{id:2,text:'华为'},{id:3,text:'小米'}]};
     $scope.brandList={data:[{id:1,text:'联想'},{id:2,text:'华为'},{id:3,text:'小米'}]};//
 
-	$scope.selectOptionList=function () {
+	$scope.findBrandList=function () {
 		brandService.selectOptionList().success(
 			function (response) {
 				$scope.brandList={data:response}
         });
     }
-    
+    $scope.findSpecificationList=function () {
+		specificationService.selectSpecificationOptionList().success(
+			function (response) {
+				$scope.specList	={data:response}
+        })
+    }
+    $scope.addTableRow=function () {
+		$scope.entity.customAttributeItems.push({});
+    }
+    $scope.deleTableRow=function (index) {
+		$scope.entity.customAttributeItems.splice(index,1);
+    }
 });	
