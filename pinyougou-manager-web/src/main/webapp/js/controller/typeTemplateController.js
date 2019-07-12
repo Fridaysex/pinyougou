@@ -27,9 +27,9 @@ app.controller('typeTemplateController' ,function($scope,$controller ,typeTempla
 		typeTemplateService.findOne(id).success(
 			function(response){
 				$scope.entity= response;
-				$scope.entity.brandList=JSON.parse($scope.entity.brandList);
-				$scope.entity.specList=JSON.parse($scope.entity.specList);
-                // $scope.entity.customAttributeItems=JSON.parse($scope.entity.customAttributeItems);
+				$scope.entity.brandIds=JSON.parse($scope.entity.brandIds);
+				$scope.entity.specIds=JSON.parse($scope.entity.specIds);
+                $scope.entity.customAttributeItems=JSON.parse($scope.entity.customAttributeItems);
 			}
 		);				
 	}
