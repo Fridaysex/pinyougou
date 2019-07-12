@@ -20,8 +20,8 @@ app.service("brandService",function($http){    //品牌服务层
 					return $http.get('../brand/findOne.do?id='+id);
 				}
 				
-				this.dele=function(){
-					return $http.get('../brand/delete.do?ids='+$scope.selectIds);
+				this.dele=function(ids){
+					return $http.get('../brand/delete.do?ids='+ids);
 				}
 
 				this.search=function(page,rows,searchEntity){

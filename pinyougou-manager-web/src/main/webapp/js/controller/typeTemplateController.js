@@ -29,7 +29,7 @@ app.controller('typeTemplateController' ,function($scope,$controller ,typeTempla
 				$scope.entity= response;
 				$scope.entity.brandList=JSON.parse($scope.entity.brandList);
 				$scope.entity.specList=JSON.parse($scope.entity.specList);
-                $scope.entity.customAttributeItems=JSON.parse($scope.entity.customAttributeItems);
+                // $scope.entity.customAttributeItems=JSON.parse($scope.entity.customAttributeItems);
 			}
 		);				
 	}
@@ -96,6 +96,7 @@ app.controller('typeTemplateController' ,function($scope,$controller ,typeTempla
 				$scope.specList	={data:response}
         })
     }
+
     $scope.addTableRow=function () {
 		$scope.entity.customAttributeItems.push({});
     }

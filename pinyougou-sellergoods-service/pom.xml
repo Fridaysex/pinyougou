@@ -9,8 +9,8 @@
   <packaging>war</packaging>
   
   <dependencies>
-  
-  		<!-- Spring -->
+
+	  <!-- Spring -->
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-context</artifactId>		
@@ -88,6 +88,7 @@
 		<artifactId>pinyougou-dao</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
+
   </dependencies>
   
   <build>  

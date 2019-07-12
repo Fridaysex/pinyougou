@@ -37,7 +37,7 @@ app.controller("brandController",function($scope,$controller,brandService){
 	}
 	
 	$scope.dele=function(){
-		brandService.dele().success(
+		brandService.dele($scope.selectIds).success(
 			function(response){
 				if(response.success){
 					$scope.reloadList();
