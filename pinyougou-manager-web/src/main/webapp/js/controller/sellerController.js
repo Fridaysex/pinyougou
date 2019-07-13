@@ -7,6 +7,7 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	$scope.findAll=function(){
 		sellerService.findAll().success(
 			function(response){
+				alert(response);
 				$scope.list=response;
 			}			
 		);
@@ -16,6 +17,7 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	$scope.findPage=function(page,rows){			
 		sellerService.findPage(page,rows).success(
 			function(response){
+				alert(response.rows)
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
@@ -71,10 +73,24 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	$scope.search=function(page,rows){			
 		sellerService.search(page,rows,$scope.searchEntity).success(
 			function(response){
+				alert()
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
 	}
+
+	$scope.updateStatus=function (sellerId,status) {
+		sellerService.updateStatus(sellerId,status).success(
+			function (response) {
+				if (response.success){
+					$scope.reloadList();
+				}else {
+					alert(response.message)
+				}
+            }
+
+		)
+    }
     
 });	

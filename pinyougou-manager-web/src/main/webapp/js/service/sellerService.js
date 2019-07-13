@@ -7,6 +7,7 @@ app.service('sellerService',function($http){
 	}
 	//分页 
 	this.findPage=function(page,rows){
+        alert("service");
 		return $http.get('../seller/findPage.do?page='+page+'&rows='+rows);
 	}
 	//查询实体
@@ -28,5 +29,10 @@ app.service('sellerService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../seller/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+
+	this.updateStatus=function (sellerId,status) {
+
+		return $http.get('../seller/updateStatus.do?sellerId='+sellerId+'&status='+status)
+    }
 });
