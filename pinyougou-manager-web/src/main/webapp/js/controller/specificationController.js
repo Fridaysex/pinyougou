@@ -5,10 +5,8 @@ app.controller('specificationController' ,function($scope,$controller,specificat
 	
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
-		alert("findAll.controller");
 		specificationService.findAll().success(
 			function(response){
-				alert("findALL.service");
 				$scope.list=response;
 			}			
 		);
@@ -16,11 +14,9 @@ app.controller('specificationController' ,function($scope,$controller,specificat
 	
 	//分页
 	$scope.findPage=function(page,rows){
-		alert("controller")	;
 		specificationService.findPage(page,rows).success(
 			function(response){
-				alert("service");
-				$scope.list=response.rows;	
+				$scope.list=response.rows;
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
@@ -83,7 +79,6 @@ app.controller('specificationController' ,function($scope,$controller,specificat
 
 	$scope.entity={specificationOptionList:[]};
 	$scope.addTableRow=function(){
-		alert("addTableRow");
 		$scope.entity.specificationOptionList.push({});
 	};
 

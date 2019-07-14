@@ -2,7 +2,6 @@ package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
 
 import com.pinyougou.mapper.TbGoodsDescMapper;
-import com.pinyougou.pojo.TbGoodsDesc;
 import com.pinyougou.pojogroup.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -51,6 +50,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 	/**
 	 * 增加
+	 * @param goods
 	 */
 
 	@Override

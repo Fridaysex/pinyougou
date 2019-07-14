@@ -27,7 +27,8 @@ public interface GoodsService {
 	
 	/**
 	 * 增加
-	*/
+	 * @param goods
+	 */
 	public void add(Goods goods);
 	
 	
