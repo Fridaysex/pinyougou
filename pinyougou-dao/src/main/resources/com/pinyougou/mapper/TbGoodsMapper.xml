@@ -127,6 +127,9 @@
       #{isDelete,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pinyougou.pojo.TbGoods" >
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
     insert into tb_goods
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -229,6 +232,7 @@
       </if>
     </trim>
   </insert>
+
   <select id="countByExample" parameterType="com.pinyougou.pojo.TbGoodsExample" resultType="java.lang.Integer" >
     select count(*) from tb_goods
     <if test="_parameter != null" >
@@ -383,4 +387,5 @@
       is_delete = #{isDelete,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
 </mapper>
