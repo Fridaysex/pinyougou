@@ -21,12 +21,14 @@ public class UploadController {
         String extName = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
         //创建一个FastDFS客户端
         try {
-            FastDFSClient fastDFSClient = new FastDFSClient("");
+            FastDFSClient fastDFSClient = new FastDFSClient("classpath:config/fdfs_client.conf");
             //执行上传处理
             String path = fastDFSClient.uploadFile(file.getBytes(), extName);
             //拼接返回的 url 和 ip 地址，拼装成完整的 url
             String url = FILE_SERVER_URL+path;
+            System.out.println(url);
             return new Result(true,url);
+
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false,"上传失败");
