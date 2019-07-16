@@ -83,8 +83,8 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 		goodsService.add($scope.entity).success(
 			function (response) {
 				 if (response.success){
-				 	alert("保存成功")
-					 $scope.entity={}
+				 	alert("保存成功");
+					 $scope.entity={};
 					 //清空富文本编辑器内容
 					 editor.html('')
 				 }else {
@@ -161,11 +161,43 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 				//获取品牌列表
 				$scope.typeTemplate.brandIds=JSON.parse($scope.typeTemplate.brandIds);
 				//模板ID改变时,同时读取customAttribute属性值
-				$scope.entity.goodsDesc.customAttributeItems=JSON.parse($scope.typeTemplate.customAttributeItems)
-        })
-    })
+				$scope.entity.goodsDesc.customAttributeItems=JSON.parse($scope.typeTemplate.customAttributeItems);
+				//模板ID改变的同时,改变规格的显示
 
-	$scope.findSpecList=function () {
+        });
 
+		typeTemplateService.findSpecList(newValue).success(
+			function (response) {
+				alert(response);
+				$scope.specList=response;
+            }
+		)
+    });
+
+	$scope.entity={goodsDesc:{itemImages:[],specificationItems:[]}};
+	//name为规格名,value为规格选项如网络制式:2G
+	$scope.updateSpecAttribute=function ($event,name,value) {
+		//执行勾选就开始判断,规格名是否在集合中存在
+		var object = $scope.searchObjectByKey($scope.entity.goodsDesc.specificationItems,'attributeName',name);
+		//返回值object为[]-{attributeName:xxx,attributeValue:[xxx1,xxx2]}中的单个对象[{},{}]
+		if (object!=null){//规格名存在
+			//判断是否选中
+			if($event.target.checked){
+                object.attributeValue.push(value);
+			}else {//移除选项
+                object.attributeValue.splice(object.attributeValue.indexOf(value),1);
+                //如果所有选项都移除了
+                if (object.attributeValue.length==0){
+					$scope.entity.goodsDesc.specificationItems.splice($scope.entity.goodsDesc.specificationItems.indexOf(object),1);
+				}
+			}
+
+		}else {//规格名不存在
+			$scope.entity.goodsDesc.specificationItems.push(
+				{"attributeName":name,"attributeValue":[value]}
+				);
+		}
     }
+
+
 });	

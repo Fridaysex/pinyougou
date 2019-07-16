@@ -38,4 +38,21 @@ app.controller("baseController",function($scope){
 		}
 		return value;
     }
+
+    //选项集合模型,集合中多个对象(一条name,value为一个对象)
+    //[{“attributeName”:”规格名称”,”attributeValue”:[“规格选项 1”,“规格选项 2”.... ] } , .... ]
+    /**
+	 * 两种情况:
+	 * 1.添加的规格选项其规格名已经存在,该情况直接在该对象中追加规格选项
+	 * 2.添加的规格选项其规格名不存在,该情况需创建一个对象{attributeName:xxx,attributeValue:xxx}
+	 * searchObject方法判断该规格名是否在集合中存在 key这里为attributeName,keyvalue为要添加的选项的规格名,这里作为值'网络'
+     */
+    $scope.searchObjectByKey=function (list,key,keyValue) {
+		for (var i=0;i<list.length;i++){
+			if (list[i][key]==keyValue){
+				return list[i];
+			}
+		}
+		return null;
+    }
 });

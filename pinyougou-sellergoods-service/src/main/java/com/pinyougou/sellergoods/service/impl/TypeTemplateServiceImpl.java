@@ -134,6 +134,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		for (Map map : list) {
 			TbSpecificationOptionExample example = new TbSpecificationOptionExample();
 			TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+//			通过spec id获取规格选项
 			criteria.andSpecIdEqualTo(new Long((Integer)map.get("id")));
 			List<TbSpecificationOption> options = specificationOptionMapper.selectByExample(example);
 			map.put("options",options);

@@ -169,7 +169,7 @@
 									            	{{pojo.color}}
 									            </td>
 									            <td>
-									           		<img alt="" src="pojo.url" width="100px" height="100px">
+									           		<img alt="" src="{{pojo.url}}" width="100px" height="100px">
 									            </td>
 												 <td> <button type="button" class="btn btn-default" title="删除" ng-click="remove_image_entity($index)"><i class="fa fa-trash-o"></i> 删除</button></td>
 					                      </tr>
@@ -182,11 +182,11 @@
                            
                             <!--扩展属性-->
                             <div class="tab-pane" id="customAttribute">
-                                <div class="row data-type" ng-repeat="item in entity.goodsDesc.customAttributeItems">
-	                                <div >
+                                <div class="row data-type" >
+	                                <div ng-repeat="item in entity.goodsDesc.customAttributeItems">
 		                                <div class="col-md-2 title">{{item.text}}</div>
 				                        <div class="col-md-10 data">
-				                              <input class="form-control" placeholder="扩展属性1" ng-model="{{item.value}}">
+				                              <input class="form-control" placeholder="{{item.value}}" ng-model="item.value">
 				                        </div>
 	                                </div>       
 
@@ -204,41 +204,20 @@
                             	<p>
                             	
                             	<div>
-                            	
+                            		{{entity.goodsDesc.specificationItems}}
 	                                <div class="row data-type">
 	                                
-		                                <div>
-			                                <div class="col-md-2 title">屏幕尺寸</div>
+		                                <div ng-repeat="pojo in specList">
+			                                <div class="col-md-2 title">{{pojo.text}}</div>
 					                        <div class="col-md-10 data">
 					                               
-					                            <span>
-					                            	<input  type="checkbox" >4.0					                            				                            	
+					                            <span ng-repeat=" option in pojo.options">
+					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event,pojo.text,option.optionName)">{{option.optionName}}
 					                            </span>  	
-												<span>
-					                            	<input  type="checkbox" >4.5					                            				                            	
-					                            </span>
-												<span>
-					                            	<input  type="checkbox" >5.0					                            				                            	
-					                            </span>												
+
 					                            	
 					                        </div>
-		                                </div>   
-										<div>
-			                                <div class="col-md-2 title">网络制式</div>
-					                        <div class="col-md-10 data">
-					                               
-					                            <span>
-					                            	<input  type="checkbox" >2G					                            				                            	
-					                            </span>  	
-												<span>
-					                            	<input  type="checkbox" >3G					                            				                            	
-					                            </span>
-												<span>
-					                            	<input  type="checkbox" >4G					                            				                            	
-					                            </span>												
-					                            	
-					                        </div>
-		                                </div>  
+		                                </div>
 		                                                                                  
 	                                </div>
 	
@@ -400,7 +379,7 @@
 			
 		</div>
 		<div class="modal-footer">						
-			<button class="btn btn-success"  data-dismiss="modal" aria-hidden="true" ng-click="add_image_entity">保存</button>
+			<button class="btn btn-success"  data-dismiss="modal" aria-hidden="true" ng-click="add_image_entity()">保存</button>
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
 		</div>
 	  </div>
