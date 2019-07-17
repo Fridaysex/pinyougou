@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller,goodsService,uploadService,itemCatService,typeTemplateService){
+app.controller('goodsController' ,function($scope,$controller,$location,goodsService,uploadService,itemCatService,typeTemplateService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -11,24 +11,57 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 			}			
 		);
 	};
-	
+	//审核状态
+	$scope.status={status:['未审核','已审核','未通过','已关闭']}
+
+
 	//分页
 	$scope.findPage=function(page,rows){			
 		goodsService.findPage(page,rows).success(
 			function(response){
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
-			}			
+			}
 		);
 	};
 	
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(){
+		var id=$location.search()['id'];//获取参数值
+		if(id==null){
+			return;
+		}
 		goodsService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+				$scope.entity= response;
+				//想富文本器添加商品介绍
+				editor.html($scop.entity.goodsDesc.introduction);
+				//显示图片列表
+				$scope.entity.goodsDesc.itemImages=JSON.parse($scope.entity.goodsDesc.itemImages);
+				//显示商品扩展属性
+				$scope.entity.goodsDesc.customAttributeItems=JSON.parse($scope.entity.goodsDesc.customAttributeItems);
+				//读取商品规格属性
+				$scope.entity.goodsDesc.specificationItems=JSON.parse($scope.entity.goodsDesc.specificationItems);
+				//sku列表规格转换
+				for (var i=0;i<$scope.entity.itemList.length;i++){
+					$scop.entity.itemList[i].spec=JSON.parse($scop.entity.itemList[i].spec)
+				}
 			}
-		);				
+		);
+		//根据规格名称和选项名称返回是否被勾选
+		$scope.checkAttributeValue=function (specName, optionName) {
+			var items = $scope.entity.goodsDesc.specificationItems;
+			var object=$scope.searchObjectByKey(items,'attributeName',specName);
+			if (object==null){
+				return false;
+			}else {
+				if (object.attributeValue.indexOf(optionName)>=0){
+					return true;
+				}else {
+					return false;
+				}
+			}
+        }
 	};
 	
 	//保存 
@@ -65,8 +98,8 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 		);				
 	};
 	
-	$scope.searchEntity={};//定义搜索对象 
-	
+	$scope.searchEntity={};//定义搜索对象
+	//条件查询只需要将查询条件(属性设置为搜索实体的属性传到后端)
 	//搜索
 	$scope.search=function(page,rows){			
 		goodsService.search(page,rows,$scope.searchEntity).success(
@@ -79,7 +112,7 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 
 	//商品添加
 	$scope.add=function () {
-		$scope.entity.goodsDesc.introduce=editor.html();
+		$scope.entity.goodsDesc.introduction=editor.html();
 		goodsService.add($scope.entity).success(
 			function (response) {
 				 if (response.success){
@@ -157,18 +190,18 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 			function (response) {
 				//获取类型模板
 				$scope.typeTemplate=response;
-				alert(response.brandIds)
 				//获取品牌列表
 				$scope.typeTemplate.brandIds=JSON.parse($scope.typeTemplate.brandIds);
 				//模板ID改变时,同时读取customAttribute属性值
-				$scope.entity.goodsDesc.customAttributeItems=JSON.parse($scope.typeTemplate.customAttributeItems);
-				//模板ID改变的同时,改变规格的显示
+				if ($location.search()['id']==null){//如果没有商品id,则加载模板中的扩展属性
+                    $scope.entity.goodsDesc.customAttributeItems=JSON.parse($scope.typeTemplate.customAttributeItems);
+                    //模板ID改变的同时,改变规格的显示
+                }
 
         });
 
 		typeTemplateService.findSpecList(newValue).success(
 			function (response) {
-				alert(response);
 				$scope.specList=response;
             }
 		)
@@ -197,7 +230,51 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 				{"attributeName":name,"attributeValue":[value]}
 				);
 		}
+    };
+    //创建SKU列表
+	$scope.createItemList=function () {
+	//初始化sku列表
+		$scope.entity.itemList=[{spec:{},price:0,num:9999,status:"0",isDefault:"0"}];
+		//让一个SKU赋值上网络制式,颜色等属性值,遍历规格名看看有几个不同的规格,让每一个sku赋值上不同的规格及其值
+		var items= $scope.entity.goodsDesc.specificationItems;
+		for (var i =0;i<items.length;i++){
+			//sku加规格及其属性值,item[i].attributeName为某种规格名,如网络制式,items[i]为网络制式的规格选项值
+			$scope.entity.itemList=addColumn($scope.entity.itemList,items[i].attributeName,items[i].attributeValue);
+		}
+    };
+	//给每一个sku的属性list.attributeName =entity.goodsDesc.specificationItems里面的网络制式或者颜色赋值
+	//specficaiton=[{网络:[2G,3G]},{颜色:['红色','黄色]}] list[i].网络
+	//想想一个商品有多少个规格,就需要遍历多少次,每个规格有多少个不同的值就需要再遍历多少次,每次遍历都给不同的规格赋不同的值,
+    addColumn=function (list, columnName, columnValues) {
+		//新的集合
+		//不同的规格以json格式存储在specfication中
+		var newList=[];
+		for (var i=0;i<list.length;i++){
+			var oldRow=list[i];
+			for (var j=0;j<columnValues.length;j++){
+				//深克隆,复制一个新的list,如果不同深克隆,那么list[i]赋值规格和相应的属性后会被第二次循环将上次的赋值覆盖掉
+				var newRow=JSON.parse(JSON.stringify(oldRow));
+				//给sku某种规格赋值
+				newRow.spec[columnName]=columnValues[j];
+				newList.push(newRow)
+			}
+1
+        }
+        return newList;
     }
 
+
+    //id查询商品分类名称
+	$scope.itemCatList=[];//商品分类列表
+	//加载商品分类列表
+	$scope.findItemCatList=function () {
+		itemCatService.findAll().success(
+			function (response) {
+				for (var i =0;i<response.length;i++){
+					$scope.itemCatList[response[i].id]=response[i].name;
+				}
+			}
+		)
+    }
 
 });	
