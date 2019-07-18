@@ -12,7 +12,7 @@ app.controller('goodsController' ,function($scope,$controller,$location,goodsSer
 		);
 	};
 	//审核状态
-	$scope.status={status:['未审核','已审核','未通过','已关闭']}
+	$scope.status=['未审核','已审核','未通过','已关闭'];
 
 
 	//分页
@@ -35,7 +35,7 @@ app.controller('goodsController' ,function($scope,$controller,$location,goodsSer
 			function(response){
 				$scope.entity= response;
 				//想富文本器添加商品介绍
-				editor.html($scop.entity.goodsDesc.introduction);
+                editor.html($scope.entity.goodsDesc.introduction);
 				//显示图片列表
 				$scope.entity.goodsDesc.itemImages=JSON.parse($scope.entity.goodsDesc.itemImages);
 				//显示商品扩展属性
@@ -44,7 +44,7 @@ app.controller('goodsController' ,function($scope,$controller,$location,goodsSer
 				$scope.entity.goodsDesc.specificationItems=JSON.parse($scope.entity.goodsDesc.specificationItems);
 				//sku列表规格转换
 				for (var i=0;i<$scope.entity.itemList.length;i++){
-					$scop.entity.itemList[i].spec=JSON.parse($scop.entity.itemList[i].spec)
+					$scop.entity.itemList[i].spec=JSON.parse($scope.entity.itemList[i].spec)
 				}
 			}
 		);
@@ -261,7 +261,7 @@ app.controller('goodsController' ,function($scope,$controller,$location,goodsSer
 1
         }
         return newList;
-    }
+    };
 
 
     //id查询商品分类名称
@@ -276,5 +276,6 @@ app.controller('goodsController' ,function($scope,$controller,$location,goodsSer
 			}
 		)
     }
+
 
 });	

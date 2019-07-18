@@ -71,6 +71,7 @@ public class GoodsServiceImpl implements GoodsService {
 	public void add(Goods goods) {
 		//设置未申请状态
 		goods.getGoods().setAuditStatus("0");
+
 		goodsMapper.insert(goods.getGoods());
 		//商品描述设置id
 		goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
@@ -86,6 +87,7 @@ public class GoodsServiceImpl implements GoodsService {
 				}
 				item.setTitle(title);
 				setItemValus(goods,item);
+				System.out.println("设置了规格");
 
 			}
 		}else {
@@ -98,6 +100,7 @@ public class GoodsServiceImpl implements GoodsService {
 			item.setSpec("{}");
 			setItemValus(goods,item);
 			itemMapper.insert(item);
+			System.out.println("未设置规格");
 
 		}
 

@@ -6,6 +6,10 @@
         <fileset id="fileset" name="Spring Security" removed="false">
           <file>file://$MODULE_DIR$/src/main/resources/spring/spring-security.xml</file>
         </fileset>
+        <fileset id="fileset2" name="Springmvc" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/spring/springmvc.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring/spring-security.xml</file>
+        </fileset>
       </configuration>
     </facet>
     <facet type="web" name="Web">
