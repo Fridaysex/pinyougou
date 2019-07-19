@@ -80,7 +80,8 @@ app.controller('goodsController' ,function($scope,$controller,$location,goodsSer
 					editor.html("");
 					$scope.entity={};
 					//重新查询
-                   $scope.reloadList();//重新加载
+					location.href="goods.html";
+                   // $scope.reloadList();//重新加载
 				}else{
 					alert(response.message);
 				}
