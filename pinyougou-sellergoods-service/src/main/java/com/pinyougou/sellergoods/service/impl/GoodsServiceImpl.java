@@ -16,12 +16,15 @@ import com.pinyougou.pojo.TbGoodsExample.Criteria;
 import com.pinyougou.sellergoods.service.GoodsService;
 
 import entity.PageResult;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
  * @author Administrator
  *
  */
+
+@Transactional
 @Service
 public class GoodsServiceImpl implements GoodsService {
 
@@ -126,6 +129,7 @@ public class GoodsServiceImpl implements GoodsService {
 		List<Map> imageList = JSON.parseArray(goods.getGoodsDesc().getItemImages(),Map.class) ;
 		if(imageList.size()>0){
 			item.setImage ( (String)imageList.get(0).get("url"));
+
 		}
 
 	}
@@ -200,7 +204,9 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public void delete(Long[] ids) {
 		for(Long id:ids){
-			goodsMapper.deleteByPrimaryKey(id);
+			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+			goods.setIsDelete("1");
+			goodsMapper.updateByPrimaryKey(goods);
 		}		
 	}
 
@@ -218,6 +224,7 @@ public class GoodsServiceImpl implements GoodsService {
 		
 		TbGoodsExample example=new TbGoodsExample();
 		Criteria criteria = example.createCriteria();
+		criteria.andIsDeleteIsNull();//添加条件查询非删除状态goods
 		
 		if(goods!=null){			
 			if(goods.getSellerId()!=null && goods.getSellerId().length()>0){
@@ -250,5 +257,26 @@ public class GoodsServiceImpl implements GoodsService {
 		Page<TbGoods> page= (Page<TbGoods>)goodsMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	/**
+	 * 批量审核商家商品更改商品审核状态
+	 */
+	@Override
+	public void updateStatus(Long[] ids,String status) {
+		for (Long id : ids) {
+			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+			goods.setAuditStatus(status);
+			goodsMapper.updateByPrimaryKey(goods);
+		}
+	}
+
+	@Override
+	public void updateMarketTable(Long[] ids, String status) {
+		for (Long id : ids) {
+			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+			goods.setIsMarketable(status);
+			goodsMapper.updateByPrimaryKey(goods);
+		}
+	}
+
 }

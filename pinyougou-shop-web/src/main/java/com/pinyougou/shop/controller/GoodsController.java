@@ -125,5 +125,15 @@ public class GoodsController {
 		goods.setSellerId(sellerId);
 		return goodsService.findPage(goods, page, rows);
 	}
-	
+
+
+	public Result updateMarketTable(Long[] ids,String status){
+		try {
+			goodsService.updateMarketTable(ids,status);
+			return new Result(true,"上架成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"下架成功");
+		}
+	}
 }

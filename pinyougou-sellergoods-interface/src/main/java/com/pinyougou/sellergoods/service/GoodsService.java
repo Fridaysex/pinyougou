@@ -59,5 +59,18 @@ public interface GoodsService {
 	 * @return
 	 */
 	public PageResult findPage(TbGoods goods, int pageNum,int pageSize);
-	
+
+
+	/**
+	 * 更改商家商品审核状态
+	 */
+
+	public void updateStatus(Long[] ids,String status);
+
+	/**
+	 * 商家商品上下架
+	 * @param ids
+	 * @param status
+	 */
+	public void updateMarketTable(Long[] ids,String status);
 }

@@ -274,11 +274,14 @@
 	</build>
   <modules>
   	<module>pinyougou-dao</module>
-  	<module>pinyougou-commom</module>
+  	<module>pinyougou-common</module>
   	<module>pinyougou-sellergoods-interface</module>
   	<module>pinyougou-manager-web</module>
   	<module>pinyougou-shop-web</module>
   	<module>pinyougou-sellergoods-service</module>
   	<module>pinyougou-pojo</module>
+    <module>pinyougou-content-interface</module>
+    <module>pinyougou-content-service</module>
+      <module>pinyougou-portal-web</module>
   </modules>
 </project>
