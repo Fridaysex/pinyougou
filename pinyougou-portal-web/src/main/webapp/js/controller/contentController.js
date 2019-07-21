@@ -1,6 +1,6 @@
-app.controller('contentController', function ($scope,$controller, contentService) {
+app.controller('contentController', function ($scope,contentService) {
 
-    $controller('baseController', {$scope: $scope});
+    // $controller('baseController', {$scope: $scope});
     $scope.contentList = [];
     $scope.findByCategoryId = function (categoryId) {
         contentService.findByCategoryId(categoryId).success(
