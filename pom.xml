@@ -188,7 +188,7 @@
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-config</artifactId>
 				<version>4.1.0.RELEASE</version>
-			</dependency>		
+			</dependency>
 			<dependency>
 			    <groupId>com.github.penggle</groupId>
 			    <artifactId>kaptcha</artifactId>
@@ -282,6 +282,6 @@
   	<module>pinyougou-pojo</module>
     <module>pinyougou-content-interface</module>
     <module>pinyougou-content-service</module>
-      <module>pinyougou-portal-web</module>
+    <module>pinyougou-portal-web</module>
   </modules>
 </project>
