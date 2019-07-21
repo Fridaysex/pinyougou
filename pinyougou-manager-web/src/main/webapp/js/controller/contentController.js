@@ -16,7 +16,8 @@ app.controller('contentController' ,function($scope,$controller,contentService,u
 	$scope.findPage=function(page,rows){			
 		contentService.findPage(page,rows).success(
 			function(response){
-				$scope.list=response.rows;	
+				$scope.list=response.rows;
+                alert(list.size());
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);

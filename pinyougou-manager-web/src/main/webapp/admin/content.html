@@ -16,15 +16,15 @@
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
 
 	<script src="../plugins/angularjs/angular.min.js"></script>
-	<!--<link href="../plugins/angularjs/pagination.css">-->
-	<!--<script src="../plugins/angularjs/pagination.js"></script>-->
-	<script src="../js/base.js"></script>
+	<script src="../plugins/angularjs/pagination.js"></script>
+	<link href="../plugins/angularjs/pagination.css">
+	<script src="../js/base_pagination.js"></script>
+	<script src="../js/service/uploadService.js"></script>
 	<script src="../js/service/contentService.js"></script>
 	<script src="../js/service/contentCategoryService.js"></script>
 	<script src="../js/controller/contentCategoryController.js"></script>
 	<script src="../js/controller/contentController.js"></script>
-	<script src="../js/service/uploadService.js"></script>
-    
+
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="contentController" ng-init="findContentCategoryList()">
@@ -43,7 +43,7 @@
                             <div class="pull-left">
                                 <div class="form-group form-inline">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ><i class="fa fa-file-o"></i> 新建</button>
+                                        <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建</button>
                                         <button type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>
                                         <button type="button" class="btn btn-default" title="开启" onclick='confirm("你确认要开启吗？")'><i class="fa fa-check"></i> 开启</button>
                                         <button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i class="fa fa-ban"></i> 屏蔽</button>
@@ -76,26 +76,27 @@
 			                          </tr>
 			                      </thead>
 			                      <tbody>
-			                          <tr>
-			                              <td><input  type="checkbox"></td>			                              
-										  <td><select ng-model="entity.categoryId" ng-options="item.id as item.name for item in contentCategoryList"></select></td>
-									      <td>1</td>
-									      <td>促销海报1</td>
-									      <td>http://wwww.hb.com/hd1.html</td>
+			                          <tr ng-repeat="entity in list">
+			                              <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+										  <td>{{entity.id}}</td>
+									      <td>{{entity.categoryId}}</td>
+									      <td>{{entity.title}}</td>
+									      <td>{{entity.url}}</td>
 									      <td>
 									      	<img alt="" src="{{entity.pic}}" width="100px" height="50px">
 									      </td>
-									      <td>1</td>
+									      <td>{{entity.sortOrder}}</td>
 										  <td><input type="checkbox" ng-model="entity.status" ng-true-value="1" ng-false-value="0">{{status[entity.status]}}<input/></td>
 		                                  <td class="text-center">                                           
-		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">修改</button>                                           
+		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)">修改</button>
 		                                  </td>
 			                          </tr>
 			                      </tbody>
 			                  </table>
-			                  <!--数据列表/--> 
+			                  <!--数据列表/-->
                         </div>
                         <!-- 数据表格 /-->
+						<tm-pagination conf="paginationConf"></tm-pagination>
                      </div>
                     <!-- /.box-body -->
 
@@ -114,21 +115,21 @@
 				<tr>
 		      		<td>广告分类</td>
 		      		<td>
-		      			<select class="form-control" >
+		      			<select class="form-control" ng-model="entity.categoryId" ng-options="item.id as item.name for item in contentCategoryList">
 		                </select>
 		      		</td>
 		      	</tr>
 		      	<tr>
 		      		<td>标题</td>
-		      		<td><input  class="form-control" placeholder="标题" >  </td>
+		      		<td><input  class="form-control" placeholder="标题" ng-model="entity.title">  </td>
 		      	</tr>
 			    <tr>
 		      		<td>URL</td>
-		      		<td><input  class="form-control" placeholder="URL" >  </td>
+		      		<td><input  class="form-control" placeholder="URL" ng-model="entity.url" >  </td>
 		      	</tr>	
 		      	<tr>
 		      		<td>排序</td>
-		      		<td><input  class="form-control" placeholder="排序" >  </td>
+		      		<td><input  class="form-control" placeholder="排序" ng-model="sortOrder">  </td>
 		      	</tr>			      	
 		      	<tr>
 		      		<td>广告图片</td>
@@ -152,13 +153,13 @@
 		      		<td>是否有效</td>
 		      		<td>
 		      		   <input type="checkbox" class="icheckbox_square-blue" >
-		      		</td>
+		      		</td><!--ng-model="entity.status" ng-true-value="1" ng-false-value="0"-->
 		      	</tr>  	
-			 </table>				
+			 </table>
 			
 		</div>
 		<div class="modal-footer">						
-			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="add()">保存</button>
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
 		</div>
 	  </div>
