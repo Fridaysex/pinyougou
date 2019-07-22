@@ -1,24 +1,31 @@
 package com.pinyougou.pojo;
 
+import org.apache.solr.client.solrj.beans.Field;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbItem implements Serializable{
+    @Field
     private Long id;
 
+    @Field("item_title")
     private String title;
 
     private String sellPoint;
 
+    @Field
     private BigDecimal price;
 
     private Integer stockCount;
 
+    @Field
     private Integer num;
 
     private String barcode;
 
+    @Field
     private String image;
 
     private Long categoryid;
