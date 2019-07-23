@@ -120,7 +120,7 @@ public class ItemCatController {
 	 */
 	@RequestMapping("/findByParentId")
 	public List<TbItemCat> findByParentId(Long parentId){
-		System.out.println("后端controller");
+
 		List<TbItemCat> tbItemCats = itemCatService.findByParentId(parentId);
 		return tbItemCats;
 	}

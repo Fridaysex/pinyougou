@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.pinyougou.mapper.TbSpecificationOptionMapper;
 import com.pinyougou.pojo.TbSpecificationOption;
 import com.pinyougou.pojo.TbSpecificationOptionExample;
@@ -17,6 +18,7 @@ import com.pinyougou.pojo.TbTypeTemplateExample.Criteria;
 import com.pinyougou.sellergoods.service.TypeTemplateService;
 
 import entity.PageResult;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 服务实现层
@@ -118,6 +120,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		}
 		
 		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
+		saveToRedis();//存储数据到缓存
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
@@ -142,5 +145,26 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		}
 		return list;
 	}
+	@Autowired
+	private RedisTemplate redisTemplate;
 
+	/**
+	 * 将数据存入缓存
+	 */
+
+	private void saveToRedis(){
+		//获取模板数据
+		List<TbTypeTemplate> typeTemplateList = findAll();
+		//循环模板
+		for (TbTypeTemplate typeTemplate : typeTemplateList) {
+			//存储品牌列表
+			List<Map> brandList = JSON.parseArray(typeTemplate.getBrandIds(),Map.class);
+			redisTemplate.boundHashOps("brandList").put(typeTemplate.getId(),brandList);
+			System.out.println("存储品牌列表");
+			//存储规格列表
+			List<Map> specList = JSON.parseArray(typeTemplate.getSpecIds(), Map.class);
+			redisTemplate.boundHashOps("specList").put(typeTemplate.getId(),specList);
+			System.out.println("存储规格列表");
+		}
+	}
 }

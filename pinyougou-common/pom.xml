@@ -18,7 +18,8 @@
     <!--缓存-->
     <dependency>
       <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-redis</artifactId>
+      <artifactId>spring-data-solr</artifactId>
+      <version>1.5.5.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>redis.clients</groupId>
