@@ -26,7 +26,7 @@ public class TbItem implements Serializable{
 
     private String barcode;
 
-    @Field("item_    private String image;\n")
+    @Field("item_image")
     private String image;
 
     private Long categoryid;
@@ -45,7 +45,7 @@ public class TbItem implements Serializable{
 
     private String isDefault;
 
-    @Field("item_goodsId")
+    @Field("item_goodsid")
     private Long goodsId;
 
     private String sellerId;
