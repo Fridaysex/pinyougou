@@ -89,8 +89,8 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             query.addFilterQuery(filterQuery);
         }
         //1.4按规格过滤
-        if (searchMap.get("spec") != null) {
-            Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
+        if (searchMap.get("spec") != null&&!searchMap.get("spec").equals("{}")) {
+            Map<String, String> specMap = (Map) searchMap.get("spec");
             for (String key : specMap.keySet()) {
                 Criteria filterCriteria = new Criteria("item_spec_" + key).is(specMap.get(key));
                 SimpleFilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
@@ -113,11 +113,13 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
         //1.6分页查询
-        Integer pageNo = (Integer) searchMap.get("pageNo");//提取页码
+        Integer pageNo = Integer.parseInt(searchMap.get("pageNo").toString());//提取页码
+        System.out.println(pageNo);
         if (pageNo==null){
             pageNo=1;//默认显示第一页
         }
-        Integer pageSize = (Integer) searchMap.get("pageSize");//每页记录数
+        Integer pageSize = (Integer.parseInt(searchMap.get("pageSize").toString()));//每页记录数
+        System.out.println(pageSize);
         if (pageSize==null){
             pageSize=20;//默认20
         }

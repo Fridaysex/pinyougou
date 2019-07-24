@@ -13,8 +13,7 @@ app.controller('searchController',function ($scope,searchService) {
 
 
     //搜索条件封装对象
-    $scope.searchMap={'keywords':'','category':'','brand':'','spec':'{}','price':'',
-        'pageNo':'1','pageSize':'40'};
+    $scope.searchMap={'keywords':'','category':'','brand':'','spec':'{}','price':'','pageNo':'1','pageSize':'40'};
     //添加搜索项
     $scope.addSearchItem=function (key, value) {
         if (key=='category'||key=='brand'||key=='price'){//如果点击的是分类或者品牌/价格

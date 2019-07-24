@@ -19,6 +19,8 @@ public class ItemSearchController {
     @RequestMapping("/search")
     public Map<String,Object> search(@RequestBody Map searchMap){
         System.out.println("后端 controller执行了");
+        System.out.println(searchMap);
+        System.out.println(searchMap.get("price"));
         return itemSearchService.search(searchMap);
     }
 }
