@@ -181,8 +181,10 @@
 				<div class="type-wrap logo" ng-if="resultMap.brandList!=null&&searchMap.brand==''">
 					<div class="fl key brand">品牌</div>
 					<div class="value logos">
-						<ul class="logo-list" ng-repeat="brand in resultMap.brandList">
-							<a href="#" ng-click="addSearchItem('brand',brand.text)" >{{brand.text}}</a>
+						<ul class="logo-list">
+							<li  ng-repeat="brand in resultMap.brandList">
+								<a href="#" ng-click="addSearchItem('brand',brand.text)">{{brand.text}}</a>
+							</li>
 
 						</ul>
 					</div>
@@ -260,7 +262,7 @@
 								<a ng-click="addSearchItem('price','2000-3000')">2000-3000元 </a>
 							</li>
 							<li>
-								<a ng-click="addSearchItem('price','3000-*')"3000元以上</a>
+								<a ng-click="addSearchItem('price','3000-*')"3000元以上></a>
 							</li>
 						</ul>
 					</div>
@@ -362,9 +364,9 @@
 								<a href="#">下一页»</a>
 							</li>
 						</ul>
-						<div><span>共{{resulMap.totalPages}}页&nbsp;</span><span>
+						<div><span>共{{resultMap.totalPages}}页&nbsp;</span><span>
       到第
-      <input type="text" class="page-num">
+      <input type="text" class="page-num" >
       页 <button class="page-confirm" onclick="alert(1)">确定</button></span></div>
 					</div>
 				</div>
