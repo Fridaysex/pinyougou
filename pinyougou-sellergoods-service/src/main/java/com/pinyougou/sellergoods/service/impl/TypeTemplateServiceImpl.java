@@ -77,6 +77,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	@Override
 	public TbTypeTemplate findOne(Long id){
 		return typeTemplateMapper.selectByPrimaryKey(id);
+
 	}
 
 	/**
@@ -131,7 +132,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	 */
 	@Override
 	public List<Map> findSpecList(Long id) {
+		//根据id查询到模板对象
 		TbTypeTemplate tbTypeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
+		//获取对应的规格列表id
 		String specIds = tbTypeTemplate.getSpecIds();
 		List<Map> list =JSON.parseArray(specIds,Map.class);
 		for (Map map : list) {
@@ -162,7 +165,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 			redisTemplate.boundHashOps("brandList").put(typeTemplate.getId(),brandList);
 			System.out.println("存储品牌列表");
 			//存储规格列表
-			List<Map> specList = JSON.parseArray(typeTemplate.getSpecIds(), Map.class);
+			List<Map> specList = findSpecList(typeTemplate.getId());
 			redisTemplate.boundHashOps("specList").put(typeTemplate.getId(),specList);
 			System.out.println("存储规格列表");
 		}
