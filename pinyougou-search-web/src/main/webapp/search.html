@@ -81,7 +81,7 @@
 										<!--searchAutoComplete-->
 										<div class="input-append">
 											<input ng-model="searchMap.keywords" type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
-											<button ng-click="search()" class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+											<button ng-click="searchMap.pageNo=1;search()" class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
 										</div>
 									</form>
 								</div>
@@ -178,7 +178,7 @@
 					</div>
 					<div class="fl ext"></div>
 				</div>
-				<div class="type-wrap logo" ng-if="resultMap.brandList!=null&&searchMap.brand==''">
+				<div class="type-wrap logo" ng-if="resultMap.brandList!=null&&searchMap.brand==''&&keywordsIsBrand()!=true">
 					<div class="fl key brand">品牌</div>
 					<div class="value logos">
 						<ul class="logo-list">
@@ -245,7 +245,7 @@
 				<div class="type-wrap">
 					<div class="fl key">价格</div>
 					<div class="fl value">
-						<ul class="type-list" ng-if="searchMao.price==''">
+						<ul class="type-list" ng-if="searchMap.price==''">
 							<li>
 								<a ng-click="addSearchItem('price','0-500')">0-500元</a>
 							</li>
@@ -300,19 +300,22 @@
 					<div class="navbar-inner filter">
 						<ul class="sui-nav">
 							<li class="active">
-								<a href="#">综合</a>
+								<a href="#" ng-click="sortSearch('','')">综合</a>
 							</li>
 							<li>
 								<a href="#">销量</a>
 							</li>
 							<li>
-								<a href="#">新品</a>
+								<a href="#" ng-click="sortSearch('updatetime','DESC')">新品</a>
 							</li>
 							<li>
 								<a href="#">评价</a>
 							</li>
 							<li>
-								<a href="#">价格</a>
+								<a href="#" ng-click="sortSearch('price','ASC')">价格↑</a>
+							</li>
+							<li>
+								<a href="#" ng-click="sortSearch('price','DESC')">价格↓</a>
 							</li>
 						</ul>
 					</div>
@@ -352,22 +355,23 @@
 				<div class="fr page">
 					<div class="sui-pagination pagination-large">
 						<ul>
-							<li class="prev disabled">
-								<a href="#">«上一页</a>
+							<li class="prev {{isTopPage()?'disabled':''}}" >
+								<a href="#" ng-click="queryByPage(searchMap.pageNo-1)">«上一页</a>
 							</li>
+							<li class="dotted" ng-if="lastDot==true"><span>...</span></li>
 							<li class="active" ng-repeat="p in pageLabel">
-								<a href="#">{{p}}</a>
+								<a href="#" ng-click="queryByPage(searchMap.pageNo)">{{p}}</a>
 							</li>
 
-							<li class="dotted"><span>...</span></li>
-							<li class="next">
-								<a href="#">下一页»</a>
+							<li class="dotted" ng-if="firstDot==true"><span>...</span></li>
+							<li class="next {{isEndPage()?'disabled':''}}" >
+								<a href="#" ng-click="queryByPage(searchMap.pageNo+1)">下一页»</a>
 							</li>
 						</ul>
 						<div><span>共{{resultMap.totalPages}}页&nbsp;</span><span>
       到第
-      <input type="text" class="page-num" >
-      页 <button class="page-confirm" onclick="alert(1)">确定</button></span></div>
+      <input type="text" class="page-num" ng-model="searchMap.pageNo">
+      页 <button class="page-confirm" ng-click="queryByPage(searchMap.pageNo)">确定</button></span></div>
 					</div>
 				</div>
 			</div>

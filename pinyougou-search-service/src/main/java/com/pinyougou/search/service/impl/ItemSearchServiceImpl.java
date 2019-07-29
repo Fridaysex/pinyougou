@@ -5,11 +5,11 @@ import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.*;
-import org.springframework.jmx.export.metadata.ManagedOperation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,30 +31,31 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Override
     public Map<String, Object> search(Map searchMap) {
         Map<String, Object> map = new HashMap<>();
-        //1.根据关键字查询
-        Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
-        Query query = new SimpleQuery();
-        query.addCriteria(criteria);
-        //添加查询条件,带分页查询方法queryForPage
-        ScoredPage<TbItem> page = solrTemplate.queryForPage(query, TbItem.class);
-        map.put("rows", page.getContent());
-        //查询列表
+        //空格处理
+        String keywords= (String)searchMap.get("keywords");
+        searchMap.put("keywords", keywords.replace(" ", ""));//关键字去掉空格
+
+        //1.查询列表
         map.putAll(searchList(searchMap));
-        //2.根据关键字查询商品分类
-        List categoryList = searchCategoryList(searchMap);
+        //2.分组查询 商品分类列表
+        List<String> categoryList = searchCategoryList(searchMap);
         map.put("categoryList", categoryList);
+
         //3.查询品牌和规格列表
-        String categoryName = (String) searchMap.get("category");
-        if (!"".equals(categoryName)) {//如果有分类名称
-            map.putAll(searchBrandAndSpecList(categoryName));
-        } else {//如果没有分类名称,按照第一个查询
-            if (categoryList.size() > 0) {
-                map.putAll(searchBrandAndSpecList((String) categoryList.get(0)));
+        String category= (String) searchMap.get("category");
+        if(!"".equals(category)){
+            map.putAll(searchBrandAndSpecList(category));
+        }else{
+            if(categoryList.size()>0){
+                map.putAll(searchBrandAndSpecList(categoryList.get(0)));
             }
         }
+
         return map;
 
     }
+
+
 
     /**
      * 根据关键字搜索列表
@@ -63,6 +64,8 @@ public class ItemSearchServiceImpl implements ItemSearchService {
      * @return
      */
     private Map searchList(Map searchMap) {
+        String keywords = (String) searchMap.get("keywords");
+        searchMap.put("keywords",keywords.replace(" ", ""));
         Map map = new HashMap<>();
         HighlightQuery query = new SimpleHighlightQuery();
         //设置高亮的域
@@ -125,6 +128,21 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         }
         query.setOffset((pageNo-1)*pageSize);//从第几条开始查询
         query.setRows(pageSize);//设置每页显示多少条
+
+        //1.7排序查询
+        String sortValue = (String) searchMap.get("sort");//ASC DESC
+        String itemField = (String) searchMap.get("sortField");
+        if (sortValue!=null&&!sortValue.equals("")) {
+            if (sortValue.equals("ASC")){
+                Sort sort = new Sort(Sort.Direction.ASC,"item_"+itemField);
+                query.addSort(sort);
+            }
+            if (sortValue.equals("DESC")){
+                Sort sort = new Sort(Sort.Direction.DESC,"item_"+itemField);
+                query.addSort(sort);
+            }
+        }
+
 
         /*======================高亮结果集======================*/
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
@@ -195,5 +213,26 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
         }
         return map;
+    }
+
+
+    /**
+     * 导入已审核的item数据
+     * @param list
+     */
+    @Override
+    public void importList(List list) {
+        solrTemplate.saveBeans(list);
+        solrTemplate.commit();
+    }
+
+    @Override
+    public void deleteByGoodsIds(List goodsIdList) {
+        System.out.println("删除商品 ID"+goodsIdList);
+        SimpleQuery query = new SimpleQuery();
+        Criteria criteria = new Criteria("item_goodids").in(goodsIdList);
+        query.addCriteria(criteria);
+        solrTemplate.delete(query);
+        solrTemplate.commit();
     }
 }
