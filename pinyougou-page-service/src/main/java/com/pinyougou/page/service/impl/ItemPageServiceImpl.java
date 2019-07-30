@@ -31,16 +31,16 @@ public class ItemPageServiceImpl implements ItemPageService {
     @Autowired
     private FreeMarkerConfig freemarkerConfig;
 
-
+    @Autowired
     private TbGoodsMapper goodsMapper;
 
-
+    @Autowired
     private TbGoodsDescMapper goodsDescMapper;
 
-
+    @Autowired
     private TbItemCatMapper itemCatMapper;
 
-
+    @Autowired
     private TbItemMapper itemMapper;
 
     /**

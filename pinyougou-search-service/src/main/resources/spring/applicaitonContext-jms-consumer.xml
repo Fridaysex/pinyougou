@@ -22,7 +22,7 @@
         <constructor-arg value="pinyougou_queue_solr"/>
     </bean>
 
-    <bean id="itemSearchListener" class="com.pinyougou.search.service.impl.ItemSearchListener"></bean>
+
     <!-- 消息监听容器  导入索引库-->
     <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="connectionFactory" />
@@ -36,7 +36,7 @@
     </bean>
 
 
-    <bean id="itemDeleteListener" class="com.pinyougou.search.service.impl.ItemDeleteListener"></bean>
+
     <!-- 消息监听容器  导入索引库-->
     <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="connectionFactory" />
